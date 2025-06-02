@@ -4,7 +4,7 @@ Commençons par définir les variables qui vont déterminer comment sera constru
 $passwordLength = 8;
 ```
 
-Ensuite, on va créer une nouvelle variable que l’on appellera `$characters`. Cette variable contiendra une longue chaîne regroupant tous les caractères possibles que notre mot de passe pourra utiliser. Elle inclura :
+Ensuite, on va créer une nouvelle variable que l’on appellera `$characters`. Cette variable contiendra une longue chaîne regroupant tous les caractères possibles qu'un mot de passe pourra utiliser. Elle inclura :
 
 1. Des lettres minuscules (de a à z):
 ```php
@@ -28,7 +28,7 @@ Maintenant, définissons une dernière variable que nous appellerons `$password`
 $password = '';
 ```
 
-À ce stade, le code complet complet de notre script ressemble à ça:
+À ce stade, le code complet de notre script ressemble à ça:
 ```php
 <?php
 	$passwordLength = 8;
@@ -50,12 +50,6 @@ En PHP, une chaîne de caractères peut être manipulée **comme un tableau** : 
 
 Par exemple :
 
-- `$characters[0]` donne le **premier** caractère,
-- `$characters[1]` donne le **deuxième**,  
-- etc.
-
-Par exemple :
-
 - `$characters[0]` donne le premier caractère,
 - `$characters[1]` donne le deuxième,
 - et ainsi de suite.
@@ -66,7 +60,7 @@ Et pour cela, on a besoin de **générer un nombre aléatoire** qui servira d’
 PHP propose une fonction très pratique : `random_int`.  
 Elle permet de générer un nombre entier aléatoire entre deux valeurs.
 
-### 👉 Elle prend deux paramètres :
+#### 👉 Elle prend deux paramètres :
 
 - Le **premier** représente la plus petite valeur possible (dans notre cas : `0`, pour le premier caractère).
 - Le **deuxième** représente la plus grande valeur possible (dans notre cas : la **longueur de la chaîne moins 1**).
@@ -81,37 +75,53 @@ Donc, notre code pour obtenir un index aléatoire sera :
 ```php
 random_int(0, strlen($characters) - 1)
 ```
-Et pour récupérer le caractère correspondant à cet index dans la chaîne :
+Et on garde cette valeur dans une variable qu'on va appeller `$andomIndex`: 
 ```php
-$characters[random_int(0, strlen($characters) - 1)]
+$randomIndex = random_int(0, strlen($characters) - 1);
 ```
-On va stocker ce caractère dans une variable appellée `$randomCharacter` et l'ajouter à `$password`: 
+Pour récupérer le caractère correspondant à cet index dans la chaîne, on fera :
+```php
+$characters[$randomIndex] // $randomIndex contient l'index aléatoire généré
+```
+On va stocker ce caractère dans une variable appellée `$randomCharacter`:
+```php
+$randomCharacter = $characters[$randomIndex] // $randomIndex contient l'index aléatoire généré
+```
+Et on ajoute ce caractère à la variable `$password`:
+```php
+$password .= $randomCharacter;
+```
+Le code final de notre boucle est: 
 ```php
 for ($i = 0; $i < $passwordLength; $i++) {
 	// Ici on choisit au hasard un caractère dans la chaîne de la variable $characters
-	$randomCharacter = $characters[random_int(0, strlen($characters) - 1)];
+	$randomIndex = random_int(0, strlen($characters) - 1);
+	$randomCharacter = $characters[$randomIndex];
 	// On ajoute ce caractère au mo de passe
 	$password .= $randomCharacter;
 }
 ```
 
-Et pour finir, on peut afficher à l'extérieur de la boucle un petit message avec un echo pour indiquer le mot de passe générer
+Et pour finir, on peut afficher à l'extérieur de la boucle un petit message avec un `echo` pour indiquer le mot de passe généré
 ```php
 echo "Le mot de passe généré est: " . $password
 ```
-Le code complet du script:
+### Le code complet du script:
 ```php
 <?php
-	$passwordLength = 8;
-	$characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-=+[]{}";
-	$password = '';
-	$charactersLength = strlen($characters);
-	for ($i = 0; $i < $passwordLength; $i++) {
-		// Ici on choisit au hasard un caractère dans la chaîne de la variable $characters
-		$randomCharacter = $characters[random_int(0, strlen($characters) - 1)];
-		// On ajoute ce caractère au mo de passe
-		$password .= $randomCharacter;
-	}
-	echo "Le mot de passe généré est: " . $password
+
+$passwordLength = 8;
+$characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-=+[]{}';
+$password = '';
+
+for ($i = 0; $i < $passwordLength; $i++) {
+	// Ici on choisit au hasard un caratère dans la chaine $characters
+	$randomIndex = random_int(0, strlen($characters) - 1);
+	$randomCahracters = $characters[$randomIndex];
+	// Ajouter ce caractère à la variabale $password
+	$password .= $randomCahracters;
+}
+
+echo 'Le mot de passe généré est: ' . $password;
 ?>
 ```
