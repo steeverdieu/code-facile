@@ -1,37 +1,45 @@
-Commençons par organiser notre générateur de mots de passe en séparant chaque type de caractère dans une variable distincte. Pour rappel, un mot de passe sécurisé doit contenir :
+Commençons par réorganiser notre générateur de mots de passe en séparant chaque type de caractère dans une variable distincte. Pour rappel, un mot de passe sécurisé doit contenir :
 - des lettres minuscules,
 - des lettres majuscules,
 - des chiffres,
 - et des caractères spéciaux.
-Nous allons donc découper notre longue chaîne de caractères en quatre groupes, chacun stocké dans sa propre variable :
-```php
-// On définit les groupes de caractères disponibles dans leur propre variable
 
+Nous allons donc découper notre grande chaîne de caractères en quatre groupes, chacun stocké dans sa propre variable :
+```php
+// On définit les groupes de caractères disponibles
 $lowercaseCharacters = "abcdefghijklmnopqrstuvwxyz";
 $uppercaseCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 $uppercaseCharacters = "0123456789";
 $specialCharacters = "!@#$%^&*()_-=+[]{}";
 ```
-Ensuite, rassemblons tous les groupes de caractères que nous avons définis précédemment pour reconstruire notre chaîne initiale. L'idée est de les combiner dans une seule variable, que nous appellerons `$characters`. Cette variable contiendra donc l’ensemble des caractères utilisables pour générer un mot de passe sécurisé :
+Ensuite, on rassemble tous ces groupes dans une seule variable `$characters`, qui contiendra l’ensemble des caractères utilisables pour générer un mot de passe :
 ```php
 $characters = $lowercaseCharacters . $uppercaseCharacters . $numbers . $specialCharacters;
 ```
-Notre code complet pour l'instant ressemble à ceci:
+Voici à quoi ressemble notre code pour le moment :
 ```php
 $passwordLength = 8;
 $password = '';
 
-// On définit les groupes de caractères disponibles dans leur propre variable
-
+// Groupes de caractères
 $lowercaseCharacters = "abcdefghijklmnopqrstuvwxyz";
 $uppercaseCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 $numbers = "0123456789";
 $specialCharacters = "!@#$%^&*()_-=+[]{}";
   
-// On rassemble tous les groupes de caractères en une seule chaine
+// Concaténation des groupes en une seule chaine
 $characters = $lowercaseCharacters . $uppercaseCharacters . $numbers . $specialCharacters;
 ```
-Une fois ce travail fait, on va s'assurer de prendre au hasard un caractère dans chaque groupe de chaine. C'est à dire, on va extraire au hasard une lettre minuscule dans la variable `$lowercaseCharacters`, une lettre majuscule dans la variable `$uppercaseCharacters`, un chiffre dans la variable `$uppercaseCharacters` et un caractère spécial dans la variable `$specialCharacters`. Pour éviter de se répeter, on va definir une fonction qui fera pour nous ce travail. On l'appellera `getCharaters` et prendra en paramettre la chaine en question.
+### 🛠 Création d'une fonction pour tirer un caractère aléatoire
+Maintenant que nos groupes de caractères sont prêts, nous allons nous assurer de sélectionner **au moins un caractère aléatoire dans chacun d’eux**.  
+Autrement dit, nous allons tirer :
+
+- une lettre minuscule depuis la variable `$lowercaseCharacters`,
+- une lettre majuscule depuis `$uppercaseCharacters`,
+- un chiffre depuis `$numbers`,
+- et un caractère spécial depuis `$specialCharacters`.
+
+Pour éviter de dupliquer le même bloc de code à chaque fois, nous allons créer une **fonction réutilisable** appelée `getCharacters`. Cette fonction prendra en paramètre une chaîne de caractères, et renverra un caractère choisi au hasard dans cette chaîne.
 ```php
 function getCharacters($str) {
 
@@ -39,30 +47,26 @@ function getCharacters($str) {
 
 }
 ```
-Pour rappel, dans la version précedente de notre script, pour récuperer un caractère au hasard d'une chaine on fasait comme suit:
+Pour rappel, dans la version précédente de notre script, pour récupérer un caractère au hasard, on faisait comme suit:
 ```php
-// On choisit un index compris entre zero et la longueur de la chaine
+// On choisit un index aléatoire compris entre 0 et la longueur de la chaîne moins 1
 $randomIndex = random_int(0, strlen($characters) - 1);
-// Ensuite on recupere le caractère qui correspond à l'index en question
-$randomCahracters = $characters[$randomIndex];
+// On récupère ensuite le caractère correspondant à cet index
+$randomCharacter = $characters[$randomIndex];
 ```
-On va reutiliser ces lignes dans notre fonction `getCharacters`, mais en les appliquant a la variable passée en paramètre:
+Nous allons maintenant **réutiliser ces lignes** dans notre fonction `getCharacters()`, mais cette fois-ci en les appliquant à la chaîne **reçue en paramètre**. Voici le résultat :
 ```php
 function getCharacters($str) {
-
-	// Script pour recuper un caractère au hasard de la chaine passée en paramètre (ici str)
-	
-	// On choisit un index compris entre zero et la longueur de la chaine passé en paramètre ($str)
-	
+	// On choisit un index aléatoire entre 0 et la longueur de la chaîne - 1
 	$randomIndex = random_int(0, strlen($str) - 1);
-	// Ensuite on recupere le caractère qui correspond à l'index en question
-	$randomCahracters = $str[$randomIndex];
+	// Ensuite on recupere le caractère qui correspond à cet index
+	$randomCharacter = $str[$randomIndex];
 	// Et on retourne le caractère récupéré
-	return $randomCahracters;
+	return $randomCharacter;
 
 }
 ```
-Notre code complet ressemble à ça pour l'instant:
+Voici à quoi ressemble notre code pour le moment :
 ```php
 $passwordLength = 8;
 $password = '';
@@ -78,100 +82,90 @@ $characters = $lowercaseCharacters . $uppercaseCharacters . $numbers . $specialC
 
 
 function getCharacters($str) {
-
-	// Script pour recuper un caractère au hasard de la chaine passée en paramètre (ici str)
-	
-	// On choisit un index compris entre zero et la longueur de la chaine passé en paramètre ($str)
-	
+	// On choisit un index aléatoire entre 0 et la longueur de la chaîne - 1
 	$randomIndex = random_int(0, strlen($str) - 1);
-	// Ensuite on recupere le caractère qui correspond à l'index en question
-	$randomCahracters = $str[$randomIndex];
+	// Ensuite on recupere le caractère qui correspond à cet index
+	$randomCharacter = $str[$randomIndex];
 	// Et on retourne le caractère récupéré
-	return $randomCahracters;
+	return $randomCharacter;
 
 }
 ```
-Une fois qu'on a ca, on a tous les elements necessaires pour constituer noptre mot de passe. On va commencer par recuperer un caractere de chaques groupe, en les concatenant a la variable `$password`:
+Une fois cette fonction prête, nous disposons de tous les éléments nécessaires pour construire notre mot de passe.  Nous allons commencer par récupérer un caractère dans **chaque groupe** de caractères, puis les concaténer dans la variable `$password` :
 ```php
-// On recupere une lettre misuscule et l'ajoute a la variable password
-
+// On récupère une lettre minuscule et on l’ajoute au mot de passe
 $password .= getCharacters($lowercaseCharacters);
-
-// On recupere une lettre majuscule et l'ajoute a la variable password
+// On récupère une lettre majuscule et on l’ajoute au mot de passe
 $password .= getCharacters($uppercaseCharacters);
-// On recupere un chiffre et l'ajoute a la variable password
+// On récupère un chiffre et on l’ajoute au mot de passe
 $password .= getCharacters($numbers);
-// On recupere un caractère spécial et l'ajoute a la variable password
+// On récupère un caractère spécial et on l’ajoute au mot de passe
 $password .= getCharacters($specialCharacters);
 ```
-Si on affiche notre mot de passe pour l'instant, on verra bien qu'il est constitué de quatre caractères, et comprend bien une lettre minuscule, une lettre majuscule, un chiffre et un caractère special:
+À ce stade, notre mot de passe contient déjà 4 caractères bien répartis. Si on l'affiche :
 ```php
 echo 'Le mot de passe généré est: ' . $password;
 ```
-Maintenant, ce qu'il nous reste, c'est recuperer le reste des caracteres, que l'on va puiser au hasard de la longue chaine characters qu'on definit plus haut. Pour cela, on va faire un boucle, et reutiliser la fonction getCharacters. Puisqu'on a deja recuperer 4 caracteres, le nombre de caracteres qu'il nous reste  a recuperer est 4, qui est la longueur de la password (la valeur de la varibale `$passwordLength` qui est 8, moins le nombre de caractere deja recuperer qui est `4`). Notre boucle va ressembler à ceci:
+on verra un mot de passe de 4 caractères, avec une lettre minuscule, une majuscule, un chiffre et un caractère spécial.
+### Compléter le mot de passe
+Comme notre objectif est de générer un mot de passe de 8 caractères (***Valeur de la variable passwordLength définie plus haut***), il nous faut en ajouter 4 autres, choisis aléatoirement dans l’ensemble complet `$characters`.
+
+Pour compléter notre mot de passe, nous allons utiliser une boucle qui va récupérer, à chaque itération, un caractère aléatoire parmi l’ensemble des caractères disponibles. Pour cela, nous réutiliserons la fonction `getCharacters()` :
 ```php
-// $passwordLength - 4 (8 -4) permet de boucler 4 fois pour recuperer le nombre de caractères restant
+// $passwordLength - 4 (8 - 4) permet de boucler 4 fois pour récupérer les caractères restants
 
 for ($i = 0; $i < $passwordLength - 4; $i++) {
-
-	// On recupère à chaque tour de boucle un nouveau caractère de la longue characteres
-	// Et l'ajoute à la variable password
-	$password .= getCharacters($characters);
-
+    // À chaque tour, on récupère un caractère aléatoire dans la chaîne complète
+    // et on l’ajoute à la variable $password
+    $password .= getCharacters($characters);
 }
 ```
-Maintenant si on affiche notre password, on aura bien un mot de passe de 8 caractères, qui contiendra à tous les coups au moins une lettre minuscule, une lettre majuscule, un chiffre et un caractère scpecial.
-### Petite et derniere correction
-Si on regarde bien, tous les mots de passe qu'on genere debute systematiquement par une lettre minuscule, une lettre majuscule, un chiffre et un caractère scpecial. Ce seront à tous les coups les quatre premiers caracteres qui s'afficheront puis qu'on les a recuperer avant tous les autres. Pour corriger ce probleme et faire en sorte que le debut de la chaine soit aleatoire, on peut shuffle le password générer, ce qui permettra de repositionner les characteres de la chaine. ce qu'on  doit faire est d'utiliser la methode `str_shuffle`:
+Si nous affichons maintenant la variable `$password`, nous obtiendrons un mot de passe de 8 caractères qui contiendra systématiquement au moins une lettre minuscule, une lettre majuscule, un chiffre, ainsi qu’un caractère spécial.
+### Petite et dernière correction
+Actuellement, tous les mots de passe générés commencent toujours par une lettre minuscule, une lettre majuscule, un chiffre, puis un caractère spécial, car ce sont les quatre premiers caractères que nous avons ajoutés avant les autres.
+
+Pour remédier à ce problème et rendre le début de la chaîne aléatoire, il suffit de **mélanger** les caractères du mot de passe généré à l’aide de la fonction `str_shuffle()`. Cela permettra de repositionner les caractères de manière totalement aléatoire.
 ```php
 $password = str_shuffle($password);
 ```
-Et voici notre script complet:
+## 🧩 Script complet
+
+Voici le générateur complet, prêt à l’emploi :
 ```php
 <?php
+
 $passwordLength = 8;
 $password = "";
 
-// On divise chaque groupe de caractères
+// Groupes de caractères
 $lowercaseCharacters = "abcdefghijklmnopqrstuvwxyz";
 $uppercaseCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 $numbers = "0123456789";
 $specialCharacters = "!@#$%^&*()_-=+[]{}";
 
+// Chaîne complète
 $characters = $lowercaseCharacters . $uppercaseCharacters . $numbers . $specialCharacters;
 
+// Fonction de sélection aléatoire
 function getCharacters($str) {
-
-	// Script pour recuper un caractère au hasard de la chaine passée en paramètre (ici str)
-	
-	// On choisit un index compris entre zero et la longueur de la chaine passé en paramètre ($str)
-	
-	$randomIndex = random_int(0, strlen($str) - 1);
-	// Ensuite on recupere le caractère qui correspond à l'index en question
-	$randomCahracters = $str[$randomIndex];
-	// Et on retourne le caractère récupéré
-	return $randomCahracters;
-
+    $randomIndex = random_int(0, strlen($str) - 1);
+    return $str[$randomIndex];
 }
 
-// On recupere une lettre misuscule et l'ajoute a la variable password
+// Ajout de caractères garantis
 $password .= getCharacters($lowercaseCharacters);
-// On recupere une lettre majuscule et l'ajoute a la variable password
 $password .= getCharacters($uppercaseCharacters);
-// On recupere un chiffre et l'ajoute a la variable password
 $password .= getCharacters($numbers);
-// On recupere un caractère spécial et l'ajoute a la variable password
 $password .= getCharacters($specialCharacters);
 
-// $passwordLength - 4 (8 -4) permet de boucler 4 fois pour recuperer le nombre de caractères restant
+// Complément du mot de passe
 for ($i = 0; $i < $passwordLength - 4; $i++) {
-
-	// On recupère à chaque tour de boucle un nouveau caractère de la longue characteres
-	// Et l'ajoute à la variable password
-	$password .= getCharacters($characters);
+    $password .= getCharacters($characters);
 }
 
+// Mélange final
 $password = str_shuffle($password);
 
-echo 'Le mot de passe généré est: ' . $password;
+echo 'Le mot de passe généré est : ' . $password;
+
 ```
