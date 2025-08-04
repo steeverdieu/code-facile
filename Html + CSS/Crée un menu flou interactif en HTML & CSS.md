@@ -1,4 +1,5 @@
 Dans cet article, je vais te montrer comment flouter du texte à l’aide de HTML et CSS, tout en construisant un joli petit menu flou. Voici un exemple de ce que nous allons faire ensemble :
+![Aperçu du menu flou](assets/blurry-menu.gif)
 
 ### Prérequis
 
@@ -8,7 +9,7 @@ Pour reproduire ce menu, tu n’as besoin que de deux choses :
 
 ### La partie HTML
 
-La partie HTML est très simple. Regarde par toi-même :
+La partie HTML est très simple :
 
 ```html
 <nav class="menu">
@@ -19,7 +20,7 @@ La partie HTML est très simple. Regarde par toi-même :
 </nav>
 ```
 
-Comme tu peux le voir, j’ai créé un élément `<nav>` auquel j’ai donné la classe `"menu"`. Cet élément est utilisé pour insérer tous les éléments de navigation. C’est aussi simple que ça.
+Comme tu peux le voir, j’ai créé un élément `<nav>` auquel j’ai donné la classe `"menu"`. Cet élément est utilisé pour insérer tous les éléments de navigation.
 
 **P.S.** : J’aurais pu utiliser un `<div>` à la place du `<nav>`, le résultat visuel aurait été le même. Mais pour respecter une structure HTML sémantique, il est plus logique d’utiliser `<nav>` pour indiquer que cet élément représente un menu de navigation.
 
@@ -57,7 +58,6 @@ body {
   text-decoration: none;
   color: transparent;
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-  transition: all 0.3s ease;
 }
 ```
 
@@ -91,8 +91,7 @@ Et voilà ! 🤩
 
 ### La dernière étape
 
-Maintenant, on veut que **lorsqu’on passe la souris sur un lien du menu**, le texte devienne lisible (donc plus flou du tout).  
-On va donc modifier la couleur du texte et enlever le flou quand il y a un **hover** :
+Maintenant, on veut que **lorsqu’on passe la souris sur un lien du menu**, le texte devienne lisible. On va donc modifier la couleur du texte et enlever le flou quand il y a un **hover** :
 
 ```css
 .menu a:hover {
