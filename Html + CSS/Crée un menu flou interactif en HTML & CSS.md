@@ -1,5 +1,5 @@
 Dans cet article, je vais te montrer comment flouter du texte à l’aide de HTML et CSS, tout en construisant un joli petit menu flou. Voici un exemple de ce que nous allons faire ensemble :
-![Aperçu du menu flou](assets/blurry-menu.gif)
+![Aperçu du menu flou](../assets/blurry-menu.gif)
 
 ### Prérequis
 
